@@ -1,17 +1,41 @@
 import { useState } from 'react';
-import bgImage from '../assets/backGround.png';
+import { useNavigate } from 'react-router-dom';
+import bgImage from '../assets/loginPageBg.png';
+import { createUser } from "../api/auth";
+
 
 function Signup() {
     const [userName, setUserName] = useState();
     const [email, setEmail] = useState();
     const [password1, setPassword1] = useState();
     const [password2, setPassword2] = useState();
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        //write out a post api and call the api here 
-    }
+        setError('');
+
+        if (password1 !== password2) {
+            setError("Passwords do not match.");
+            return;
+        }
+
+        const data = {
+            username : userName,
+            email : email,
+            password : password1
+        };
+
+        try {
+            await createUser(data);
+            navigate('/login');
+        } catch (err) {
+            setError(err?.response?.data?.message || "Signup failed. Please try again.");
+        }
+    };
+
+
     return(
         <>
             <div 

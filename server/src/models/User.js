@@ -9,11 +9,7 @@ const userSignupSchema = new mongoose.Schema({
         type: String,
         required : true
     },
-    password1 : {
-        type: String,
-        required : true
-    },
-    password2 : {
+    password : {
         type: String,
         required : true
     }
