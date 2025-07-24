@@ -17,7 +17,7 @@ connectDB();
 
 
 //routes
-app.use('/auth',authRoutes);
+app.use('/auth', authRoutes);
 
 
 const PORT = env.PORT || 3000;

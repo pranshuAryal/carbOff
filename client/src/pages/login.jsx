@@ -2,23 +2,35 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import bgImage from '../assets/loginPageBg.png';
 import { Link } from 'react-router-dom';
+import { loginUser } from '../api/login';
 
 function Login() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        try {
-            await loginUser({ username, password });
-            navigate('/');
-        } catch (err) {
-            setError(err?.response?.data?.message || "Login failed. Please try again.");
-        }
+    e.preventDefault();
+    setError('');
+    try {
+        const res = await loginUser({ email, password });
+        const token = res.access_token;
+        if (!token) throw new Error("No token received from server.");
+        localStorage.setItem('jwt-token', token);
+        navigate('/');
+    } catch (err) {
+        setError(
+            err?.response?.data?.error ||
+            err?.response?.data?.message ||
+            err?.message ||
+            "Login failed. Please try again."
+        );
+    }
     };
+
+
+
 
     return(
         <>
@@ -33,13 +45,13 @@ function Login() {
                             <div className="text-red-600 font-semibold mb-2">{error}</div>
                         )}
                         <div>
-                            <label className="block text-xl font-semibold mb-2">Username</label>
+                            <label className="block text-xl font-semibold mb-2">Email</label>
                             <input
                                 type="text"
-                                placeholder="Enter username"
+                                placeholder="Enter email"
                                 className="w-full border-2 border-gray-300 bg-white rounded-lg px-4 py-2 mb-2 focus:outline-none"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div>

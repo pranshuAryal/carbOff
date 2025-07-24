@@ -1,5 +1,5 @@
-
-function Dashboard() {
+function Calculator() {
+    console.log("hehehihi")
     return (
         <>
             <div>
@@ -9,4 +9,4 @@ function Dashboard() {
     )
 }
 
-export default Dashboard
+export default Calculator

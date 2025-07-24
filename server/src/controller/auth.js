@@ -1,34 +1,51 @@
 import User from "../models/User.js";
-
-function encrypt(rawPassword) {
-    return rawPassword + "1234";
-}
+import bcrypt from 'bcryptjs';
+import { generateToken } from "../utils/auth.js";
 
 
-export const login = async (req,res) => {
-    try {
-        const {email, password} = req.body;
-        const user = await User.findOne({ email });
-        
-        if(user.password === encrypt(password)) {
-            res.status(200).json({
-                access_token : "123456"
-            })
-        }
+export const login = async (req, res) => {
+	try {
+		const { email, password } = req.body;
+		const user = await User.findOne({ email });
 
-    } catch(err) {
-        res.status(500).json({ error: err.message});
-    } 
-}
+		if (!user) {
+			return res.status(401).json({ error: "Invalid credentials" });
+		}
+
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) {
+			return res.status(401).json({ error: "Invalid credentials" });
+		}
+
+		res.status(200).json({
+			access_token: generateToken(user)
+		});
+		
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
+};
 
 export const signup = async (req,res) => {
     try {
-        const userData = req.body;
-        const user = new User(userData);
-        await user.save();
-        res.status(201).json(user);
+        const { username, email, password } = req.body;
 
-    } catch(err) {
-        res.status(500).json({ error: err.message});
-    } 
+        const existingUser = await User.findOne({ email });
+        if (existingUser)
+            return res.status(400).json({ error: "User already exists" });
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const user = new User({ username, email, password: hashedPassword });
+        await user.save();
+
+        const userObject = user.toObject();
+        delete userObject.password;
+
+
+        res.status(201).json(userObject);
+            } catch (err) {
+        res.status(500).json({ error: err.message });
+            }
 }
