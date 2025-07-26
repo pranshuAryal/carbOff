@@ -3,9 +3,10 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 
 import env from "./config/env.js"
-import connectDB from './config/db.js';
+import connectDB from './config/db.js'
 
 import authRoutes from './routes/auth.js'
+import emissionRoutes from './routes/emission.js' 
 
 const app = express();
 app.use(express.json());
@@ -18,7 +19,7 @@ connectDB();
 
 //routes
 app.use('/auth', authRoutes);
-
+app.use('/calculator',emissionRoutes)
 
 const PORT = env.PORT || 3000;
 
