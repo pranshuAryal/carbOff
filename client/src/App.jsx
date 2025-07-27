@@ -4,7 +4,6 @@ import {BrowserRouter, Routes, Route, useLocation} from 'react-router'
 import Login from './pages/login'
 import Signup from './pages/signup'
 import Dashboard from './pages/dashboard'
-import Calculator from './pages/calculator'
 import ProtectedRoute from './components/protectedRoutes'
 import MainLayout from './components/mainlayout'
 
@@ -21,7 +20,6 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/calculator" element={<Calculator />} />
           </Route>
         </Route>
       </Routes>
