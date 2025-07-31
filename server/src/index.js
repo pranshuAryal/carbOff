@@ -6,11 +6,14 @@ import env from "./config/env.js"
 import connectDB from './config/db.js'
 
 import authRoutes from './routes/auth.js'
-import emissionRoutes from './routes/emission.js' 
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',   // Your frontend origin
+  methods: ['GET', 'POST', 'OPTIONS'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization']  // Allowed headers
+}));
 
 
 //connect to database
@@ -19,7 +22,6 @@ connectDB();
 
 //routes
 app.use('/auth', authRoutes);
-app.use('/calculator',emissionRoutes)
 
 const PORT = env.PORT || 3000;
 

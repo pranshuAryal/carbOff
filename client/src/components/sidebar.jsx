@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { FaCog, FaHome, FaSignOutAlt } from 'react-icons/fa';
+import logo from '../assets/logo.png';
 
 function SideBar() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function SideBar() {
     <div className="h-screen w-64 p-6 bg-[rgb(98,131,122)] flex flex-col items-center py-6 z-50">
       {/* Logo */}
       <div className="mb-10">
-        <img src="/your-logo.png" alt="Logo" className="h-20 w-20 rounded-full" />
+        <img src={logo} alt="Logo" className="h-20 w-20 rounded-full" />
       </div>
       {/* Nav links */}
       <nav className="flex-1 w-full">

@@ -11,7 +11,7 @@ export const get = async (url) => {
 
 export const post = async (url, data) => {
 	const headers = { "Content-Type": "application/json" };
-
+	
 	const res = await fetch(`${API_BASE_URL}${url}`, {
 		method: "POST",
 		headers,
